@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>林杰涛 · 摄影摄像作品集</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== 全局重置 & 基础 ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --color-bg: #ffffff;
+            --color-text: #1a1a1a;
+            --color-muted: #888888;
+            --color-light-bg: #f7f7f9;
+            --color-border: rgba(0, 0, 0, 0.06);
+            --radius-card: 20px;
+            --shadow-card: 0 20px 50px rgba(0, 0, 0, 0.06);
+            --transition-smooth: cubic-bezier(0.25, 0.1, 0.15, 1);
+            --max-w: 1440px;
+        }
+
+        html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        img { max-width: 100%; display: block; }
+        a { color: inherit; text-decoration: none; }
+
+        /* ===== 4K / 高分辨率优化 ===== */
+        @media (min-width: 2560px) {
+            :root { --max-w: 1920px; }
+            html { font-size: 20px; }
+            .hero-title { font-size: 5rem !important; }
+        }
+        @media (min-width: 3840px) {
+            :root { --max-w: 2400px; }
+            html { font-size: 24px; }
+            .hero-title { font-size: 6rem !important; }
+        }
+
+        .container { max-width: var(--max-w); margin: 0 auto; padding: 0 2rem; }
+
+        /* ===== 图片锐化渲染 ===== */
+        img { image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
+
+        /* ===== Custom Cursor (Green Dot + Ring) ===== */
+        * { cursor: none !important; }
+        .cursor-dot {
+            position: fixed; width: 8px; height: 8px; pointer-events: none; z-index: 99999;
+            background: #00ff88; border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.2s, transform 0.15s var(--transition-smooth);
+        }
+        .cursor-ring {
+            position: fixed; width: 36px; height: 36px; pointer-events: none; z-index: 99998;
+            border: 2px solid #00ff88; border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.25s var(--transition-smooth), height 0.25s var(--transition-smooth), opacity 0.2s, border-color 0.2s;
+        }
+        .cursor-ring.hover {
+            width: 56px; height: 56px;
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.08);
+        }
+        .cursor-dot.hover {
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+        @media (hover: none) and (pointer: coarse) {
+            * { cursor: auto !important; }
+            .cursor-dot, .cursor-ring { display: none; }
+        }
+
+        /* ===== Navbar (Apple/Tesla Style) ===== */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between;
+            transition: all 0.4s var(--transition-smooth);
+        }
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 1px 0 var(--color-border);
+        }
+        .navbar.scrolled .nav-brand { color: var(--color-text); }
+        .navbar.scrolled .nav-links a { color: var(--color-muted); }
+        .navbar.scrolled .nav-links a:hover { color: var(--color-text); }
+        .navbar:not(.scrolled) .nav-brand { color: #fff; }
+        .navbar:not(.scrolled) .nav-links a { color: rgba(255,255,255,0.75); }
+        .navbar:not(.scrolled) .nav-links a:hover { color: #fff; }
+        .nav-brand {
+            font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em;
+            transition: color 0.4s var(--transition-smooth);
+        }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            font-size: 0.875rem; font-weight: 500;
+            transition: all 0.3s var(--transition-smooth);
+            position: relative; display: inline-block;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px;
+            background: currentColor; transition: width 0.3s var(--transition-smooth);
+        }
+        .nav-links a:hover {
+            transform: scale(1.12);
+            font-weight: 600;
+        }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* ===== Hero ===== */
+        .hero {
+            position: relative; min-height: 100vh; display: flex; align-items: center;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; inset: 0; z-index: 0;
+            background: url('public/images/brands/bvlgari.jpg') center/cover no-repeat;
+            filter: brightness(0.5);
+        }
+        .hero-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%);
+        }
+        .hero-content { position: relative; z-index: 1; color: #fff; }
+        .hero-badge {
+            display: inline-block; padding: 0.4rem 1rem; border-radius: 100px;
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            font-size: 0.8rem; font-weight: 500; margin-bottom: 1.5rem;
+        }
+        .hero-title { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1.5rem; }
+        .hero-bio { font-size: 1.05rem; max-width: 640px; line-height: 1.8; opacity: 0.85; margin-bottom: 2rem; }
+        .hero-devices {
+            display: flex; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap;
+        }
+        .hero-device { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+        .hero-device .label { color: rgba(255,255,255,0.4); font-size: 0.75rem; display: block; margin-bottom: 0.2rem; }
+        .hero-device .value { color: rgba(255,255,255,0.9); font-weight: 500; }
+        .hero-cta {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.85rem 2rem; border-radius: 100px;
+            background: #fff; color: #1a1a1a; font-weight: 600; font-size: 0.9rem;
+            transition: all 0.3s var(--transition-smooth);
+        }
+        .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+
+        /* ===== Section Headers ===== */
+        .section { padding: 6rem 0; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.75rem; }
+        .section-title { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+        .section-subtitle { font-size: 1.05rem; color: var(--color-muted); }
+
+        /* ===== Filters ===== */
+        .filters { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+        .filter-btn {
+            padding: 0.5rem 1.25rem; border-radius: 100px; border: 1px solid var(--color-border);
+            background: transparent; font-size: 0.85rem; font-weight: 500; color: var(--color-muted);
+            cursor: pointer; transition: all 0.3s var(--transition-smooth);
+        }
+        .filter-btn:hover { border-color: var(--color-text); color: var(--color-text); }
+        .filter-btn.active { background: var(--color-text); color: #fff; border-color: var(--color-text); }
+
+        /* ===== Projects Grid (Horizontal Cards) ===== */
+        .projects-grid { display: flex; flex-direction: column; gap: 2rem; }
+        .project-card {
+            display: flex; flex-direction: row; align-items: stretch;
+            background: var(--color-bg); border-radius: var(--radius-card); overflow: hidden;
+            box-shadow: var(--shadow-card); cursor: pointer;
+            transition: all 0.4s var(--transition-smooth);
+            border: 1px solid var(--color-border);
+        }
+        .project-card.reverse { flex-direction: row-reverse; }
+        .project-card:hover { transform: translateY(-4px); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+        .card-img {
+            flex: 0 0 45%; position: relative; overflow: hidden; min-height: 300px;
+        }
+        .card-img img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.6s var(--transition-smooth);
+        }
+        .project-card:hover .card-img img { transform: scale(1.05); }
+        .media-badge {
+            position: absolute; top: 1rem; left: 1rem;
+            padding: 0.35rem 0.8rem; border-radius: 100px;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+            color: #fff; font-size: 0.75rem; font-weight: 500;
+        }
+        .card-body {
+            flex: 1; padding: 2.5rem; display: flex; flex-direction: column; justify-content: center;
+        }
+        .card-body .tag {
+            display: inline-block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em;
+            color: var(--color-muted); margin-bottom: 0.75rem;
+        }
+        .card-body h3 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+        .card-desc { font-size: 0.95rem; color: var(--color-muted); line-height: 1.7; margin-bottom: 1rem; }
+        .card-meta { display: flex; gap: 1.5rem; font-size: 0.8rem; color: var(--color-muted); margin-bottom: 1.5rem; }
+        .card-link {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-size: 0.85rem; font-weight: 600; color: var(--color-text);
+        }
+        .card-link .arrow { transition: transform 0.3s; }
+        .project-card:hover .card-link .arrow { transform: translateX(4px); }
+
+        /* ===== Gallery Showcase (Bottom Section, Apple Style) ===== */
+        .gallery-showcase {
+            background: #000; color: #fff; padding: 5rem 0; min-height: 100vh;
+        }
+        .gallery-showcase-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;
+        }
+        .gallery-showcase-title {
+            font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 700; letter-spacing: -0.02em;
+        }
+        .gallery-showcase-count {
+            font-size: 0.85rem; color: rgba(255,255,255,0.4); font-weight: 500;
+        }
+        .gallery-back-btn {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.6rem 1.25rem; border-radius: 100px;
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.3s;
+        }
+        .gallery-back-btn:hover { background: rgba(255,255,255,0.15); }
+
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        @media (min-width: 2560px) { .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); } }
+        @media (min-width: 3840px) { .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(460px, 1fr)); } }
+
+        .gallery-item {
+            position: relative; border-radius: 16px; overflow: hidden;
+            background: #111; cursor: pointer; aspect-ratio: 4/3;
+            transition: transform 0.4s var(--transition-smooth), box-shadow 0.4s;
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.6s var(--transition-smooth);
+        }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .gallery-item-overlay {
+            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+            opacity: 0; transition: opacity 0.3s; display: flex; flex-direction: column;
+            justify-content: flex-end; padding: 1.25rem;
+        }
+        .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+        .gallery-item-title { font-size: 0.9rem; font-weight: 600; color: #fff; margin-bottom: 0.2rem; }
+        .gallery-item-tag { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        .gallery-item-badge {
+            position: absolute; top: 0.75rem; right: 0.75rem;
+            padding: 0.3rem 0.6rem; border-radius: 8px;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
+            font-size: 0.7rem; font-weight: 600; color: #fff;
+            display: flex; align-items: center; gap: 0.3rem;
+        }
+
+        /* ===== Gallery Category Section ===== */
+        .gallery-category-section { margin-bottom: 4rem; }
+        .gallery-category-section:last-child { margin-bottom: 0; }
+        .gallery-category-header {
+            display: flex; align-items: center; gap: 1rem;
+            margin-bottom: 1.5rem; padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .gallery-category-title {
+            font-size: 1.5rem; font-weight: 700; color: #fff; letter-spacing: -0.02em;
+        }
+        .gallery-category-tag {
+            font-size: 0.8rem; color: rgba(255,255,255,0.4); font-weight: 500;
+        }
+        .gallery-category-count {
+            margin-left: auto; font-size: 0.85rem; color: rgba(255,255,255,0.3);
+        }
+        .gallery-vr-link {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            padding: 0.35rem 0.9rem; border-radius: 100px;
+            background: rgba(0, 255, 136, 0.12); border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88; font-size: 0.8rem; font-weight: 600;
+            transition: all 0.3s var(--transition-smooth); cursor: pointer;
+        }
+        .gallery-vr-link:hover {
+            background: rgba(0, 255, 136, 0.2); border-color: rgba(0, 255, 136, 0.6);
+            transform: scale(1.05);
+        }
+        .gallery-item-hint {
+            position: absolute; bottom: 0.75rem; left: 0.75rem;
+            padding: 0.3rem 0.7rem; border-radius: 8px;
+            background: rgba(0, 255, 136, 0.85); backdrop-filter: blur(10px);
+            font-size: 0.7rem; font-weight: 600; color: #111;
+            pointer-events: none;
+        }
+
+        /* ===== Lightbox ===== */
+        .lightbox {
+            position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,0.95);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+        }
+        .lightbox.open { opacity: 1; visibility: visible; }
+        .lightbox-content {
+            max-width: 90vw; max-height: 85vh; border-radius: 16px; overflow: hidden;
+            position: relative;
+        }
+        .lightbox-content img { max-width: 90vw; max-height: 85vh; object-fit: contain; }
+        .lightbox-content video { max-width: 90vw; max-height: 85vh; }
+        .lightbox-close {
+            position: absolute; top: 1.5rem; right: 1.5rem; z-index: 10;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.2rem; transition: background 0.3s;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+        .lightbox-info {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 1.5rem 2rem; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: #fff;
+        }
+        .lightbox-info h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.3rem; }
+        .lightbox-info p { font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+
+        /* ===== Strengths ===== */
+        .strengths-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        .strength-card {
+            padding: 2rem; border-radius: 16px; background: var(--color-light-bg);
+            transition: all 0.3s var(--transition-smooth);
+        }
+        .strength-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .strength-card h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .strength-card p { font-size: 0.9rem; color: var(--color-muted); line-height: 1.6; }
+
+        /* ===== Contact ===== */
+        .contact { background: var(--color-light-bg); text-align: center; }
+        .contact-heading { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+        .contact-tagline { font-size: 1.05rem; color: var(--color-muted); margin-bottom: 3rem; }
+        .contact-cards {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem; max-width: 800px; margin: 0 auto 3rem;
+        }
+        .contact-card {
+            padding: 1.5rem; border-radius: 16px; background: var(--color-bg);
+            border: 1px solid var(--color-border); text-align: left; transition: all 0.3s;
+        }
+        .contact-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .contact-card .label { font-size: 0.75rem; color: var(--color-muted); margin-bottom: 0.3rem; }
+        .contact-card .value { font-size: 1rem; font-weight: 600; }
+        .contact-divider { width: 1px; height: 40px; background: var(--color-border); margin: 0 auto 1.5rem; }
+        .contact-footer-note { font-size: 0.8rem; color: var(--color-muted); }
+
+        /* ===== Reveal Animations ===== */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s, transform 0.6s; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 1024px) {
+            .project-card { flex-direction: column !important; }
+            .card-img { flex: none; min-height: 240px; }
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+        }
+        @media (max-width: 768px) {
+            .container { padding: 0 1rem; }
+            .section { padding: 4rem 0; }
+            .nav-links { display: none; }
+            .card-body { padding: 1.5rem; }
+            .hero-devices { gap: 1rem; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+        }
+    </style>
+
+    <link rel="stylesheet" href="lib/pannellum/pannellum.css" />
+    <script src="lib/pannellum/pannellum.js"></script>
+
+</head>
+<body>
+
+    <!-- ===== Custom Cursor (Green Dot + Ring) ===== -->
+    <div class="cursor-ring" id="cursorRing"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <!-- ===== Navbar ===== -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="nav-brand">林杰涛 · 作品集</a>
+        <ul class="nav-links">
+            <li><a href="#about">经历</a></li>
+            <li><a href="#projects">项目</a></li>
+            <li><a href="#strengths">优势</a></li>
+            <li><a href="#contact">联系我</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="about">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+            <span class="hero-badge reveal">摄影 · 摄像 · 剪辑 · AI视频</span>
+            <h1 class="hero-title reveal reveal-delay-1">林杰涛</h1>
+            <p class="hero-bio reveal reveal-delay-2">
+                拥有 5 年+ 视觉创作经验，专注户外地标广告媒体拍摄与视频剪辑。负责媒体涵盖机场贵宾厅媒体、户外地标媒体、商圈媒体、深圳高尔夫媒体等。服务行业：奢侈品（香奈儿、迪奥、LV 等）、汽车（阿斯顿马丁、宾利、玛莎拉蒂）、金融、3C、美妆香氛、快消、地产等行业。同时探索 AI 生成视频领域，将人工智能技术与影像创作结合。
+            </p>
+            <div class="hero-devices reveal reveal-delay-2">
+                <div class="hero-device">
+                    <span class="label">自有设备</span>
+                    <span class="value">尼康 Z62 / Z30 · 大疆 Mini 3 Pro</span>
+                </div>
+                <div class="hero-device">
+                    <span class="label">坐标</span>
+                    <span class="value">深圳</span>
+                </div>
+            </div>
+            <a href="#projects" class="hero-cta reveal reveal-delay-3">
+                查看作品
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== Projects ===== -->
+    <section class="section" id="projects">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">精选作品</div>
+                <h2 class="section-title">品牌媒体 · 城市建筑 · 人像摄影 · 延时影像 · AI视频</h2>
+            </div>
+            <div class="filters reveal" id="filters">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="brand">品牌媒体</button>
+                <button class="filter-btn" data-filter="ai">AI视频</button>
+                <button class="filter-btn" data-filter="clip">剪辑作品</button>
+                <button class="filter-btn" data-filter="city">城市建筑</button>
+                <button class="filter-btn" data-filter="portrait">人像摄影</button>
+                <button class="filter-btn" data-filter="timelapse">延时摄影</button>
+                <button class="filter-btn" data-filter="panorama">720全景</button>
+            </div>
+            <div class="projects-grid" id="projectsGrid"></div>
+        </div>
+    </section>
+
+    <!-- ===== Contact ===== -->
+    <section class="section contact" id="contact">
+        <div class="container">
+            <h2 class="contact-heading reveal">联系我</h2>
+            <p class="contact-tagline reveal reveal-delay-1">用镜头讲述你的品牌故事</p>
+            <div class="contact-cards reveal reveal-delay-2">
+                <a href="tel:17788772844" class="contact-card">
+                    <div class="label">电话</div>
+                    <div class="value">177 8877 2844</div>
+                </a>
+                <a href="mailto:1946786689@qq.com" class="contact-card">
+                    <div class="label">邮箱</div>
+                    <div class="value">1946786689@qq.com</div>
+                </a>
+                <div class="contact-card">
+                    <div class="label">微信</div>
+                    <div class="value">jtjt_666666</div>
+                </div>
+                <div class="contact-card">
+                    <div class="label">坐标</div>
+                    <div class="value">深圳</div>
+                </div>
+            </div>
+            <div class="contact-divider reveal reveal-delay-3"></div>
+            <p class="contact-footer-note reveal reveal-delay-3">© 2026 林杰涛 · 视觉叙事</p>
+        </div>
+    </section>
+
+    <!-- ===== Gallery Showcase (Bottom Section - All Works by Category) ===== -->
+    <section class="gallery-showcase" id="galleryShowcase">
+        <div class="container">
+            <div class="gallery-showcase-header">
+                <div>
+                    <h2 class="gallery-showcase-title">全部作品</h2>
+                    <span class="gallery-showcase-count" id="galleryCount"></span>
+                </div>
+                <button class="gallery-back-btn" id="galleryBack">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    返回作品
+                </button>
+            </div>
+            <div id="galleryAllContainer"></div>
+        </div>
+    </section>
+
+    <!-- ===== Strengths ===== -->
+    <section class="section" id="strengths" style="background: var(--color-light-bg);">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-label">为什么选择我</div>
+                <h2 class="section-title">技术 · 创意 · 执行力</h2>
+            </div>
+            <div class="strengths-grid">
+                <div class="strength-card reveal">
+                    <h4>多设备精通</h4>
+                    <p>熟练使用索尼、尼康、大疆等设备，及基础布光能力适应不同场景的拍摄需求。</p>
+                </div>
+                <div class="strength-card reveal reveal-delay-1">
+                    <h4>无人机航拍 & 延时</h4>
+                    <p>持有 UOM 无人机理论合格证，可完成高空视角拍摄与城市夜景延时创作。</p>
+                </div>
+                <div class="strength-card reveal reveal-delay-2">
+                    <h4>技术 & 运维能力</h4>
+                    <p>掌握计算机维护、Office 办公套件，具备基础网络与硬件排障能力。</p>
+                </div>
+                <div class="strength-card reveal">
+                    <h4>全流程影像创作</h4>
+                    <p>从前期策划、拍摄到后期剪辑、调色，完整把控每一个环节，确保视觉语言统一且富有感染力。</p>
+                </div>
+                <div class="strength-card reveal reveal-delay-1">
+                    <h4>高效团队协作</h4>
+                    <p>与市场运营团队高效沟通，快速响应需求变更，交付素材均一次性通过审核。</p>
+                </div>
+                <div class="strength-card reveal reveal-delay-2">
+                    <h4>多行业服务经验</h4>
+                    <p>服务奢侈品、汽车、地产、手机、金融、餐饮、快消等品牌，能够快速完成不同要求的拍摄内容。</p>
+                </div>
+                <div class="strength-card reveal">
+                    <h4>剪辑与调色</h4>
+                    <p>熟练使用 Pr、剪映进行剪辑包装，对色彩还原、画面质感有严格把控。</p>
+                </div>
+                <div class="strength-card reveal reveal-delay-1">
+                    <h4>城市建筑摄影</h4>
+                    <p>擅长城市地标、建筑空间摄影，运用构图与光影呈现深圳等都市的天际线与建筑美学。</p>
+                </div>
+                <div class="strength-card reveal reveal-delay-2">
+                    <h4>AI 生成视频</h4>
+                    <p>运用人工智能技术生成数字人、抽象景观、赛博人像等视频内容，探索科技与艺术的视觉融合。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Lightbox ===== -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose">✕</button>
+        <div class="lightbox-content" id="lightboxContent"></div>
+        <div class="lightbox-info" id="lightboxInfo" style="display:none;"></div>
+    </div>
+
+    <script>
+        // ===== Project Data =====
+        const projectsData = [
+            { id: 1, title: 'BALENCIAGA · 深圳媒体', tag: '奢侈品 · LED验收', category: 'brand', desc: 'BALENCIAGA 户外 LED 媒体广告实拍验收，把控画面清晰度、色彩还原与亮度标准。', img: 'public/images/brands/balenciaga.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 2, title: 'BVLGARI · 深圳媒体', tag: '奢侈品 · LED验收', category: 'brand', desc: 'BVLGARI 宝格丽户外 LED 媒体广告实拍验收。', img: 'public/images/brands/bvlgari.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 3, title: 'CHANEL · 深圳媒体', tag: '奢侈品 · LED验收', category: 'brand', desc: 'CHANEL 香奈儿户外 LED 媒体广告实拍验收。', img: 'public/images/brands/chanel.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 4, title: 'Celine · 深圳媒体', tag: '奢侈品 · LED验收', category: 'brand', desc: 'Celine 思琳户外 LED 媒体广告实拍验收。', img: 'public/images/brands/celine.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 5, title: 'DIOR · 深圳媒体', tag: '奢侈品 · LED验收', category: 'brand', desc: 'DIOR 迪奥户外 LED 媒体广告实拍验收。', img: 'public/images/brands/dior.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 6, title: 'LV · 深圳媒体', tag: '奢侈品 · LED验收', category: 'brand', desc: 'Louis Vuitton 路易威登户外 LED 媒体广告实拍验收。', img: 'public/images/brands/lv.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 7, title: 'Loro Piana · 深圳媒体', tag: '奢侈品 · LED验收', category: 'brand', desc: 'Loro Piana 诺悠翩雅户外 LED 媒体广告实拍验收。', img: 'public/images/brands/loro-piana.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 8, title: 'PRADA · 深圳媒体', tag: '奢侈品 · LED验收', category: 'brand', desc: 'PRADA 普拉达户外 LED 媒体广告实拍验收。', img: 'public/images/brands/prada.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 9, title: 'TIFFANY & CO · 深圳媒体', tag: '奢侈品 · LED验收', category: 'brand', desc: 'TIFFANY & CO 蒂芙尼户外 LED 媒体广告实拍验收。', img: 'public/images/brands/tiffany-co.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 10, title: '兰蔻 · 品牌宣传片', tag: '剪辑 · 品牌视频', category: 'clip', desc: '兰蔻品牌宣传视频剪辑，从素材整理、节奏把控到调色输出，完整呈现品牌调性与产品质感。', img: 'public/images/clips/lancome.jpg', videoSrc: 'public/videos/lancome.mp4', mediaType: 'video', meta1: '📅 深圳', meta2: '🏷️ 剪辑 · 品牌' },
+            { id: 21, title: 'STOKKE · 品牌宣传片', tag: '剪辑 · 品牌视频', category: 'clip', desc: 'STOKKE 品牌宣传视频剪辑，展现产品细节与品牌调性，从素材整理到调色输出完整呈现。', img: 'public/images/clips/stokke.jpg', videoSrc: 'public/videos/stokke.mp4', mediaType: 'video', meta1: '📅 深圳', meta2: '🏷️ 剪辑 · 品牌' },
+            { id: 11, title: '深中通道 · 跨海工程', tag: '城市建筑 · 地标', category: 'city', desc: '深中通道跨海大桥实拍，记录世纪工程的宏伟气势与海上日落光影。', img: 'public/images/architecture/shenzhong-bridge.jpg', meta1: '📅 深圳', meta2: '🏷️ 城市 · 建筑' },
+            { id: 12, title: '深圳湾地标群', tag: '城市建筑 · 天际线', category: 'city', desc: '深圳湾地标建筑群实拍，呈现湾区现代都市天际线的繁华与建筑美学。', img: 'public/images/architecture/shenzhenbay-landmark.jpg', meta1: '📅 深圳', meta2: '🏷️ 城市 · 建筑' },
+            { id: 13, title: '福田罗湖 CBD', tag: '城市建筑 · 天际线', category: 'city', desc: '福田罗湖 CBD 三件套建筑实拍，展现深圳中心商务区的密集建筑群与城市活力。', img: 'public/images/architecture/futian-skyline.jpg', meta1: '📅 深圳', meta2: '🏷️ 城市 · 建筑' },
+            { id: 14, title: '笔架山 · 岁宝壹品', tag: '城市建筑 · 地标', category: 'city', desc: '笔架山岁宝壹品建筑实拍，俯瞰城市建筑与自然山景的交融。', img: 'public/images/architecture/bijiashan.jpg', meta1: '📅 深圳', meta2: '🏷️ 城市 · 建筑' },
+            { id: 15, title: '人像摄影 · 商业', tag: '人像 · 商业', category: 'portrait', desc: '商业人像摄影，注重光影塑造与人物情绪表达。', img: 'public/images/portrait/portrait-1.jpg', meta1: '📅 深圳', meta2: '🏷️ 人像 · 商业' },
+            { id: 16, title: '人像摄影 · 纪实', tag: '人像 · 纪实', category: 'portrait', desc: '纪实人像摄影，捕捉真实瞬间与人物故事。', img: 'public/images/portrait/portrait-2.jpg', meta1: '📅 深圳', meta2: '🏷️ 人像 · 纪实' },
+            { id: 17, title: '人像摄影 · 创作', tag: '人像 · 创作', category: 'portrait', desc: '创作人像摄影，探索光影与情绪的艺术表达。', img: 'public/images/portrait/portrait-3.jpg', meta1: '📅 深圳', meta2: '🏷️ 人像 · 创作' },
+            { id: 18, title: '城市延时 · 0531', tag: '延时摄影 · 视频', category: 'timelapse', desc: '深圳城市延时摄影，以时间压缩呈现都市昼夜流转与光影变幻。', img: 'public/images/timelapse/timelapse-0531.jpg', videoSrc: 'public/videos/timelapse-0531.mp4', mediaType: 'video', meta1: '📅 深圳', meta2: '🏷️ 延时 · 城市' },
+            { id: 19, title: '城市延时 · 2110', tag: '延时摄影 · 视频', category: 'timelapse', desc: '深圳城市延时摄影，记录天际线在时间长河中的律动。', img: 'public/images/timelapse/timelapse-2110.jpg', videoSrc: 'public/videos/timelapse-2110.mp4', mediaType: 'video', meta1: '📅 深圳', meta2: '🏷️ 延时 · 城市' },
+            { id: 22, title: '720° 全景 · 原始全景', tag: '720全景 · VR', category: 'panorama', desc: '720° 全景摄影，沉浸式呈现空间全貌，适用于商业空间、展厅、景点等场景的云端展示。', img: 'public/images/panorama/panorama-1.jpg', isPano: true, meta1: '📅 深圳', meta2: '🏷️ 720全景 · VR' },
+            { id: 20, title: '720° 全景 · LED媒体', tag: '720全景 · 云端', category: 'panorama', desc: '720° 全景摄影，沉浸式呈现空间全貌，点击图片进入720云查看完整全景。', img: 'public/images/panorama/panorama-frame-led.jpg', vrLink: 'https://www.720yun.com/vr/d5cjO0tvOf1', meta1: '📅 深圳', meta2: '🏷️ 720全景 · VR' },
+            { id: 23, title: 'AI 视频 · 数字人', tag: 'AI视频 · 数字人', category: 'ai', desc: 'AI 生成数字人影像，探索人工智能与视觉艺术的融合边界，呈现未来感数字角色。', img: 'public/images/ai/ai-video-1-frame.jpg', videoSrc: 'public/videos/ai/ai-video-1.mp4', mediaType: 'video', meta1: '📅 深圳', meta2: '🏷️ AI · 数字人' },
+            { id: 24, title: 'AI 视频 · 数字景观', tag: 'AI视频 · 抽象', category: 'ai', desc: 'AI 生成抽象数字景观，以算法构建流动的几何与色彩，呈现科技与艺术的视觉对话。', img: 'public/images/ai/ai-video-2-frame.jpg', videoSrc: 'public/videos/ai/ai-video-2.mp4', mediaType: 'video', meta1: '📅 深圳', meta2: '🏷️ AI · 抽象' },
+            { id: 25, title: 'AI 视频 · 赛博人像', tag: 'AI视频 · 赛博', category: 'ai', desc: 'AI 生成赛博风格人像，将数字数据流与人物肖像融合，探索虚拟与现实的美学交集。', img: 'public/images/ai/ai-video-3-frame.jpg', videoSrc: 'public/videos/ai/ai-video-3.mp4', mediaType: 'video', meta1: '📅 深圳', meta2: '🏷️ AI · 赛博' }
+        ];
+
+        // ===== Category Covers =====
+        const categoryCovers = [
+            { id: 'gallery-brand', title: '奢侈品 · 户外媒体', tag: '品牌媒体 · LED验收', category: 'brand', count: 9, desc: '为 BALENCIAGA、BVLGARI、CHANEL、Celine、DIOR、LV、Loro Piana、PRADA、TIFFANY & CO 等奢侈品牌户外 LED 媒体广告提供实拍验收，把控画面清晰度、色彩还原与亮度标准。', img: 'public/images/brands/bvlgari.jpg', meta1: '📅 深圳', meta2: '🏷️ 奢侈品 · 媒体' },
+            { id: 'gallery-ai', title: 'AI 视频 · 生成影像', tag: 'AI视频 · 生成艺术', category: 'ai', count: 3, desc: 'AI 生成视频作品，运用人工智能技术探索数字人、抽象景观与赛博人像等方向，呈现科技与艺术的视觉对话。', img: 'public/images/ai/ai-video-1.jpg', meta1: '📅 深圳', meta2: '🏷️ AI · 生成' },
+            { id: 'gallery-clip', title: '剪辑作品 · 品牌', tag: '剪辑 · 品牌视频', category: 'clip', count: 1, desc: '兰蔻品牌宣传视频剪辑，从素材整理、节奏把控到调色输出，完整呈现品牌调性与产品质感。', img: 'public/images/clips/lancome.jpg', meta1: '📅 深圳', meta2: '🏷️ 剪辑 · 品牌' },
+            { id: 'gallery-city', title: '城市建筑 · 地标', tag: '城市建筑 · 天际线', category: 'city', count: 4, desc: '深圳城市地标建筑摄影，涵盖深中通道、深圳湾地标群、福田罗湖 CBD、笔架山岁宝壹品等，捕捉湾区现代都市天际线的繁华与建筑美学。', img: 'public/images/architecture/futian-skyline.jpg', meta1: '📅 深圳', meta2: '🏷️ 城市 · 建筑' },
+            { id: 'gallery-portrait', title: '人像摄影 · 商业', tag: '人像摄影 · 商业', category: 'portrait', count: 3, desc: '商业人像与纪实摄影，注重光影塑造与人物情绪表达，涵盖商业人像、纪实人像、创作人像等多种风格。', img: 'public/images/portrait/portrait-1.jpg', meta1: '📅 深圳', meta2: '🏷️ 人像 · 商业' },
+            { id: 'gallery-timelapse', title: '城市延时 · 影像', tag: '延时摄影 · 视频', category: 'timelapse', count: 2, desc: '深圳城市延时摄影，以时间压缩呈现都市昼夜流转与光影变幻，记录天际线在时间长河中的律动。', img: 'public/images/timelapse/timelapse-0531.jpg', meta1: '📅 深圳', meta2: '🏷️ 延时 · 城市' },
+            { id: 'gallery-panorama', title: '720° 全景 · 云端', tag: '720全景 · VR', category: 'panorama', count: 2, desc: '720° 全景摄影，沉浸式呈现空间全貌，适用于商业空间、展厅、景点等场景的云端展示。', img: 'public/images/panorama/panorama-frame-led.jpg', vrLink: 'https://www.720yun.com/vr/d5cjO0tvOf1', meta1: '📅 深圳', meta2: '🏷️ 720全景 · VR' }
+        ];
+
+        // ===== DOM =====
+        const grid = document.getElementById('projectsGrid');
+        const galleryShowcase = document.getElementById('galleryShowcase');
+        const galleryAllContainer = document.getElementById('galleryAllContainer');
+        const galleryCount = document.getElementById('galleryCount');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxContent = document.getElementById('lightboxContent');
+        const lightboxInfo = document.getElementById('lightboxInfo');
+        const navbar = document.getElementById('navbar');
+        let pannellumViewer = null;
+
+        // ===== Render Projects (Gallery Cover Cards) =====
+        function renderProjects(filter = 'all') {
+            let items;
+            if (filter === 'all') {
+                items = categoryCovers;
+            } else {
+                items = categoryCovers.filter(c => c.category === filter);
+            }
+
+            grid.innerHTML = items.map((p, idx) => `
+                <div class="project-card reveal reveal-delay-${(idx % 3) + 1}${idx % 2 === 1 ? ' reverse' : ''}" data-gallery="${p.category}">
+                    <div class="card-img">
+                        <img src="${p.img}" alt="${p.title}" loading="lazy" />
+                        <span class="media-badge">📷 共 ${p.count} 个作品</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="tag">${p.tag}</span>
+                        <h3>${p.title}</h3>
+                        <p class="card-desc">${p.desc}</p>
+                        <div class="card-meta"><span>${p.meta1}</span><span>${p.meta2}</span></div>
+                        <span class="card-link">进入画廊
+                            <svg class="arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </span>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const cat = card.dataset.gallery;
+                    if (cat) scrollToCategory(cat);
+                });
+            });
+
+            // Reveal observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+
+        // ===== Render All Gallery (All Categories at Once) =====
+        function renderAllGallery() {
+            const totalCount = projectsData.length;
+            galleryCount.textContent = `共 ${totalCount} 个作品 · ${categoryCovers.length} 个分类`;
+
+            galleryAllContainer.innerHTML = categoryCovers.map(cover => {
+                const items = projectsData.filter(p => p.category === cover.category);
+                const itemsHtml = items.map(item => {
+                    let badge = '';
+                    if (item.vrLink) {
+                        badge = '<span class="gallery-item-badge">🔗 720云</span>';
+                    } else if (item.mediaType === 'video') {
+                        badge = '<span class="gallery-item-badge">▶ 视频</span>';
+                    } else if (item.category === 'panorama') {
+                        badge = '<span class="gallery-item-badge">🌐 360°</span>';
+                    }
+                    return `
+                        <div class="gallery-item" data-id="${item.id}">
+                            <img src="${item.img}" alt="${item.title}" loading="lazy" />
+                            ${badge}
+                            <div class="gallery-item-overlay">
+                                <div class="gallery-item-title">${item.title}</div>
+                                <div class="gallery-item-tag">${item.tag}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                const vrLinkHtml = cover.vrLink ? `<a href="${cover.vrLink}" target="_blank" rel="noopener" class="gallery-vr-link" onclick="event.stopPropagation()">🔗 720云查看全景</a>` : '';
+
+                return `
+                    <div class="gallery-category-section" id="cat-${cover.category}">
+                        <div class="gallery-category-header">
+                            <span class="gallery-category-title">${cover.title}</span>
+                            <span class="gallery-category-tag">${cover.tag}</span>
+                            ${vrLinkHtml}
+                            <span class="gallery-category-count">${items.length} 个作品</span>
+                        </div>
+                        <div class="gallery-grid">${itemsHtml}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Click handler for each gallery item
+            galleryAllContainer.querySelectorAll('.gallery-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const id = parseInt(el.dataset.id);
+                    const project = projectsData.find(p => p.id === id);
+                    if (!project) return;
+                    if (project.vrLink) {
+                        window.open(project.vrLink, '_blank');
+                    } else {
+                        openLightbox(project);
+                    }
+                });
+            });
+
+            // Add hint text for panorama items
+            galleryAllContainer.querySelectorAll('.gallery-item').forEach(el => {
+                const id = parseInt(el.dataset.id);
+                const project = projectsData.find(p => p.id === id);
+                if (project && project.isPano) {
+                    const hint = document.createElement('div');
+                    hint.className = 'gallery-item-hint';
+                    hint.textContent = '🖱️ 点击查看360°全景';
+                    el.appendChild(hint);
+                }
+            });
+        }
+
+        // ===== Scroll to Category Section =====
+        function scrollToCategory(category) {
+            const target = document.getElementById('cat-' + category);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                galleryShowcase.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // ===== Lightbox =====
+        function destroyPanorama() {
+            if (pannellumViewer) { pannellumViewer.destroy(); pannellumViewer = null; }
+        }
+
+        function openLightbox(project) {
+            destroyPanorama();
+            lightboxInfo.style.display = 'none';
+
+            if (project.isPano) {
+                lightboxContent.innerHTML = '<div id="panoramaViewer" style="width:85vw;height:80vh;border-radius:16px;overflow:hidden;"></div>';
+                setTimeout(() => {
+                    const viewerEl = document.getElementById('panoramaViewer');
+                    if (viewerEl && window.pannellum) {
+                        pannellumViewer = pannellum.viewer('panoramaViewer', {
+                            type: 'equirectangular',
+                            panorama: project.img,
+                            autoLoad: true,
+                            autoRotate: -2,
+                            showZoomCtrl: true,
+                            showFullscreenCtrl: true,
+                            compass: true,
+                            haov: 360, vaov: 180,
+                            minHfov: 50, maxHfov: 120, hfov: 100
+                        });
+                    }
+                }, 100);
+            } else if (project.category === 'panorama' && project.vrLink) {
+                const vrBtn = `<a href="${project.vrLink}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:0.5rem;margin-top:1rem;padding:0.7rem 1.5rem;border-radius:100px;background:#00ff88;color:#111;font-weight:700;font-size:0.85rem;text-decoration:none;">🔗 720云查看完整全景 →</a>`;
+                lightboxContent.innerHTML = `
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;">
+                        <a href="${project.vrLink}" target="_blank" rel="noopener" style="text-decoration:none;">
+                            <img src="${project.img}" alt="${project.title}" style="max-width:90vw;max-height:70vh;border-radius:16px;object-fit:contain;box-shadow:0 20px 60px rgba(0,0,0,0.5);cursor:pointer;" />
+                        </a>
+                        ${vrBtn}
+                    </div>
+                `;
+            } else if (project.mediaType === 'video') {
+                lightboxContent.innerHTML = `<video src="${project.videoSrc}" controls playsinline autoplay></video>`;
+            } else {
+                lightboxContent.innerHTML = `<img src="${project.img}" alt="${project.title}" />`;
+            }
+
+            lightboxInfo.innerHTML = `<h3>${project.title}</h3><p>${project.desc}</p>`;
+            lightboxInfo.style.display = 'block';
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('open');
+            document.body.style.overflow = '';
+            destroyPanorama();
+            const video = lightboxContent.querySelector('video');
+            if (video) video.pause();
+            setTimeout(() => { lightboxContent.innerHTML = ''; }, 300);
+        }
+
+        document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // ===== Gallery Back Button =====
+        document.getElementById('galleryBack').addEventListener('click', () => {
+            document.getElementById('projects').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        // ===== Keyboard =====
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+        });
+
+        // ===== Filters =====
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderProjects(btn.dataset.filter);
+            });
+        });
+
+        // ===== Navbar scroll =====
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+        });
+
+        // ===== Init =====
+        renderProjects();
+        renderAllGallery();
+        // ===== Custom Cursor Tracking (Green Dot + Ring) =====
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorRing = document.getElementById('cursorRing');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            // Dot follows precisely (no lag)
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+        });
+
+        // Ring follows with smooth lerp
+        function animateRing() {
+            ringX += (mouseX - ringX) * 0.18;
+            ringY += (mouseY - ringY) * 0.18;
+            cursorRing.style.left = ringX + 'px';
+            cursorRing.style.top = ringY + 'px';
+            requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        // Hover effect on interactive elements
+        document.querySelectorAll('a, button, .project-card, .gallery-item, .filter-btn, .lightbox-close, .gallery-back-btn').forEach(el => {
+            el.addEventListener('mouseenter', () => { cursorDot.classList.add('hover'); cursorRing.classList.add('hover'); });
+            el.addEventListener('mouseleave', () => { cursorDot.classList.remove('hover'); cursorRing.classList.remove('hover'); });
+        });
+
+        // Hide cursor when leaving window
+        document.addEventListener('mouseleave', () => { cursorDot.style.opacity = '0'; cursorRing.style.opacity = '0'; });
+        document.addEventListener('mouseenter', () => { cursorDot.style.opacity = '1'; cursorRing.style.opacity = '1'; });
+
+        console.log('🚀 林杰涛 · 作品集已加载 (4K优化版)');
+    </script>
+</body>
+</html>
